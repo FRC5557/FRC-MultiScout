@@ -1,0 +1,37 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  teams:
+    sign_in: You must be signed in to update team information.
+    not_found: Team with number %{number} was not found. If you are sure you are entering it correctly, create your team's identity on FRC MultiScout.
+    not_saved: An internal error prevented your team information from being saved.
+    join_request: Successfully submitted request to join team %{number}.
+    request_cancel: Successfully cancelled request to join team.
+    permissions: You do not have permission to manage this team.
+    additional: You already have a team registration associated with your account.
+    not_exist: You do not have a team registration associated with your account.
+    reg_not_exist: That registration request does not exist.
+    member_confirm: Member successfully confirmed.
+    member_deny: Member successfully denied.
+    member_remove: Member successfully removed.
+    member_promote: Member successfully promoted.
+    member_demote: Member successfully demoted.

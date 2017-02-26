@@ -1,0 +1,108 @@
+<div class="row">
+  <div class="col-lg-2 col-sm-1"></div>
+  <div class="col-lg-4 col-sm-5 col-xs-12">
+    <div class="page-header">
+      <h2>Edit Account</h2>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="field form-group">
+        <%= f.label :first_name %><br />
+        <%= f.text_field :first_name, autofocus: true, class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :last_name %><br />
+        <%= f.text_field :last_name, class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, class: 'form-control' %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <div class="field form-group">
+        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+        <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+        <% if @minimum_password_length %>
+          <em><%= @minimum_password_length %> characters minimum</em>
+        <% end %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+        <%= f.password_field :current_password, autocomplete: "off", class: 'form-control' %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Update", class: 'btn btn-default' %>
+      </div>
+    <% end %>
+
+    <h3>Delete My Account</h3>
+
+    <p><%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?"}, method: :delete, class: "btn btn-danger" %></p>
+  </div>
+  <div class="col-lg-4 col-sm-5 col-xs-12">
+    <div class="page-header">
+      <h2>Team Information</h2>
+    </div>
+    <% if current_user.team_registration.nil? %>
+      <p><em>Your account is not currently tied to a team.</em></p>
+      <p>Use the form below to join a team. A team manager will need to confirm your membership.</p>
+      <%= form_tag({controller: '/team_registrations', action: :create}, method: :post, class: 'form-inline') do %>
+        <div class="form-group">
+          <%= label_tag :team, "Team Number" %>
+          <%= text_field_tag :team, '', list: "teams", class: "form-control" %>
+          <datalist id="teams">
+            <% Team.all.each do |team| %>
+              <option value="<%= team.number %>"></option>
+            <% end %>
+          </datalist>
+        </div>
+        <%= submit_tag "Join Team", class: "btn btn-default" %>
+      <% end %>
+      <br/>
+      <p>If your team has not been created on FRC MultiScout, click the button below.</p>
+      <%= link_to 'Create Team Identity', new_team_path, class: 'btn btn-default' %>
+    <% elsif current_user.team_registration.denied %>
+      <% if current_user.team_registration.confirmed_at.nil? %>
+        <p><em>Your request to join team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %> was denied.</em></p>
+      <% else %>
+        <p><em>You were removed from team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %>.</em></p>
+      <% end %>
+      <p>Use the form below to submit a new request. A team manager will need to confirm your membership.</p>
+      <%= form_tag({controller: '/team_registrations', action: :update}, method: :patch, class: 'form-inline') do %>
+        <div class="form-group">
+          <%= label_tag :team, "Team Number" %>
+          <%= text_field_tag :team, '', list: "teams", class: "form-control" %>
+          <datalist id="teams">
+            <% Team.all.each do |team| %>
+              <option value="<%= team.number %>"></option>
+            <% end %>
+          </datalist>
+        </div>
+        <%= submit_tag "Join Team", class: "btn btn-default" %>
+      <% end %>
+    <% elsif current_user.team_registration.confirmed_at.nil? %>
+      <p><em>You have submitted a request to join team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %>.</em></p>
+      <p>Your membership is pending approval by a team manager.</p>
+      <p>You can cancel your request by clicking the button below.</p>
+      <%= link_to 'Cancel Join Team Request', team_registrations_path, method: :delete, class: 'btn btn-warning' %>
+    <% else %>
+      <p><em>You are a <%= current_user.is_team_manager ? 'manager' : 'member' %> of team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %>.</em></p>
+    <% end %>
+  </div>
+  <div class="col-lg-2 col-sm-1"></div>
+</div>

@@ -1,0 +1,2 @@
+class SchematicRegistrationsController < ApplicationController
+end

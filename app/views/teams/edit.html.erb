@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-lg-2 col-sm-1"></div>
+  <div class="col-lg-4 col-sm-5 col-xs-12">
+    <div class="page-header">
+      <h2>Team Settings</h2>
+    </div>
+
+    <% if @team.scout_schema.nil? %>
+      <p><em>Your team has not selected a scouting schematic.</em></p>
+      <p>Use the form below to quickly search for a scouting schematic, or <%= link_to 'click here', '/' %> to browse schematics in detail.</p>
+
+      <%= form_tag({controller: :schematic_registrations, action: :create}, method: :post, class: 'form-inline') do %>
+        <div class="form-group">
+          <%= label_tag :schema, "Schematic Name" %>
+          <%= text_field_tag :schema, '', list: "schemas", class: "form-control" %>
+          <datalist id="schmas">
+            <% ScoutSchema.all.each do |schema| %>
+              <option value="<%= schema.name %>"></option>
+            <% end %>
+          </datalist>
+        </div>
+        <%= submit_tag "Select Schema", class: "btn btn-default" %>
+      <% end %>
+    <% else %>
+
+    <% end %>
+  </div>
+  <div class="col-lg-4 col-sm-5 col-xs-12">
+    <div class="page-header">
+      <h2>Team Members</h2>
+    </div>
+
+    <p><em>There <%= "#{@team.unconfirmed_members.count == 1 ? 'is' : 'are'}" %> <%= pluralize(@team.unconfirmed_members.count, 'member') %> pending confirmation.</em></p>
+    <% if @team.unconfirmed_members.count != 0 %>
+      <table class="table table-condensed">
+        <thead>
+          <tr><th colspan="3"><center>Unconfirmed Members</center></th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @page_unconfirmed.each do |reg| %>
+            <tr>
+              <td>
+                <a tabindex="0" role="button" data-trigger="focus" data-toggle="popover" title="User Information" data-content="Email: <%= reg.user.email %>" data-placement="bottom">
+                  <%= reg.user.first_name + ' ' + reg.user.last_name %>
+                </a>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <%= link_to 'Confirm', team_registrations_confirm_path(reg), class: 'btn btn-xs btn-primary' %>
+                  <%= link_to 'Deny', team_registrations_deny_path(reg), class: 'btn btn-xs btn-warning' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @page_unconfirmed, param_name: :pageu, window: 2 %>
+    <% end %>
+    <p><em>There <%= "#{@team.confirmed_members.count == 1 ? 'is' : 'are'}" %> currently <%= pluralize(@team.confirmed_members.count, 'confirmed member') %> on the team.</em></p>
+
+    <% if @team.confirmed_members.count != 0 %>
+      <table class="table table-condensed">
+        <thead>
+          <tr><th colspan="3"><center>Current Members</center></th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @page_confirmed.each do |reg| %>
+            <tr>
+              <td>
+                <% #TODO insert correct time %>
+                <a tabindex="0" role="button" data-trigger="focus" data-toggle="popover" title="User Information" data-content="Email: <%= reg.user.email %> Confirmed: <%= reg.user.confirmed_at.strftime('%h:%m') %> Status: <%= reg.user.is_team_manager ? 'Manager' : 'Member' %>" data-placement="bottom">
+                  <%= reg.user.first_name + ' ' + reg.user.last_name %>
+                </a>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <% if reg.user.is_team_manager %>
+                    <%= link_to 'Demote', team_registrations_demote_path(reg), class: 'btn btn-xs btn-info' %>
+                  <% else %>
+                    <%= link_to 'Promote', team_registrations_promote_path(reg), class: 'btn btn-xs btn-info' %>
+                  <% end %>
+                  <%= link_to 'Remove', team_registrations_remove_path(reg), class: 'btn btn-xs btn-danger' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @page_confirmed, param_name: :pagec, window: 2 %>
+    <% end %>
+  </div>
+  <div class="col-lg-2 col-sm-1"></div>
+</div>
+<script>
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+</script>

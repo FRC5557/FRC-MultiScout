@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FRC MultiScout</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ujs/1.2.2/rails.min.js" integrity="sha256-BbyWhCn0G+F6xbWJ2pcI5LnnpsnpSzyjJNVtl7ABp+M=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+</head>
+<body>
+  <div class="container-fluid">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to 'FRC MultiScout', root_path, {class: 'navbar-brand'} %>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="<%= 'active' if params[:action] == 'index' && params[:controller] == 'scout' %>">
+              <%= link_to "<i class='fa fa-home'></i> Home".html_safe, root_path %>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <% if user_signed_in? %>
+              <li class='dropdown <%= "active" if params[:controller] == "users/registrations" %>'>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                  <i class="fa fa-user"></i> <%= current_user.first_name %> <span class="caret"></span>
+                </a>
+                <ul class='dropdown-menu'>
+                  <li class="<%= 'active' if params[:action] == 'edit' && params[:controller] == 'users/registrations' %>">
+                    <%= link_to '<i class="fa fa-edit"></i> Edit Account'.html_safe, edit_user_registration_path %>
+                  </li>
+                  <% if current_user.is_team_manager && !current_user.team_registration.nil? && current_user.team_registration.current_reg? %>
+                    <li class="<%= 'active' if params[:action] == 'edit' && params[:controller] == 'teams' %>">
+                      <%= link_to '<i class="fa fa-users"></i> Manage Team'.html_safe, edit_team_path(current_user.team_registration.team.number) %>
+                    </li>
+                  <% end %>
+                  <li><%= link_to '<i class="fa fa-sign-out"></i> Sign Out'.html_safe, destroy_user_session_path, method: :delete %></li>
+                </ul>
+              </li>
+            <% else %>
+              <li class="<%= 'active' if params[:action] == 'new' && params[:controller] == 'users/registrations' %>">
+                <%= link_to '<i class="fa fa-address-card-o"></i> Sign Up'.html_safe, new_user_registration_path %>
+              </li>
+              <li class="<%= 'active' if params[:action] == 'new' && params[:controller] == 'devise/sessions' %>">
+                <%= link_to '<i class="fa fa-sign-in"></i> Sign In'.html_safe, new_user_session_path %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <%= flash_messages! %>
+
+    <%= yield %>
+  </div>
+</body>
+</html>
