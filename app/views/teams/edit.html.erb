@@ -9,20 +9,37 @@
       <p><em>Your team has not selected a scouting schematic.</em></p>
       <p>Use the form below to quickly search for a scouting schematic, or <%= link_to 'click here', '/' %> to browse schematics in detail.</p>
 
-      <%= form_tag({controller: :schematic_registrations, action: :create}, method: :post, class: 'form-inline') do %>
+      <%= form_tag({controller: :schematics, action: :update}, method: :patch, class: 'form-inline') do %>
         <div class="form-group">
           <%= label_tag :schema, "Schematic Name" %>
           <%= text_field_tag :schema, '', list: "schemas", class: "form-control" %>
-          <datalist id="schmas">
+          <datalist id="schemas">
             <% ScoutSchema.all.each do |schema| %>
               <option value="<%= schema.name %>"></option>
             <% end %>
           </datalist>
         </div>
+        <%= hidden_field_tag :team, @team.id %>
         <%= submit_tag "Select Schema", class: "btn btn-default" %>
       <% end %>
     <% else %>
+      <p><em>Your team is using the <%= @team.scout_schema.name %> scouting schematic.</em></p>
+      <p>You can review its parameters by <%= link_to 'clicking here', '/' %>.</p>
+      <p>Use the form below to quickly search for another scouting schematic, or <%= link_to 'click here', '/' %> to browse schematics in detail.</p>
 
+      <%= form_tag({controller: :schematics, action: :update}, method: :patch, class: 'form-inline') do %>
+        <div class="form-group">
+          <%= label_tag :schema, "Schematic Name" %>
+          <%= text_field_tag :schema, '', list: "schemas", class: "form-control" %>
+          <datalist id="schemas">
+            <% ScoutSchema.all.each do |schema| %>
+              <option value="<%= schema.name %>"></option>
+            <% end %>
+          </datalist>
+        </div>
+        <%= hidden_field_tag :team, @team.id %>
+        <%= submit_tag "Select Schema", class: "btn btn-default" %>
+      <% end %>
     <% end %>
   </div>
   <div class="col-lg-4 col-sm-5 col-xs-12">
@@ -103,4 +120,3 @@
     $('[data-toggle="popover"]').popover()
   })
 </script>
-<%= console %>

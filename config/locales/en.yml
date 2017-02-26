@@ -35,3 +35,4 @@ en:
     member_remove: Member successfully removed.
     member_promote: Member successfully promoted.
     member_demote: Member successfully demoted.
+    schema_success: Schematic successfully chosen.

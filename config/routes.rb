@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
 
   resources :teams
-  resources :schematic_registrations
+  resources :schematics
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

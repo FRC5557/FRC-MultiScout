@@ -1,2 +1,0 @@
-class SchematicRegistrationsController < ApplicationController
-end

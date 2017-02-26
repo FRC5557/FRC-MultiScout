@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170225234232) do
     t.boolean  "is_official", default: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.index ["name"], name: "index_scout_schemas_on_name", unique: true, using: :btree
   end
 
   create_table "team_registrations", force: :cascade do |t|

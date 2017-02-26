@@ -7,5 +7,7 @@ class CreateScoutSchemas < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :scout_schemas, :name, unique: true
   end
 end
