@@ -75,8 +75,7 @@
           <% @page_confirmed.each do |reg| %>
             <tr>
               <td>
-                <% #TODO insert correct time %>
-                <a tabindex="0" role="button" data-trigger="focus" data-toggle="popover" title="User Information" data-content="Email: <%= reg.user.email %> Confirmed: <%= reg.user.confirmed_at.strftime('%h:%m') %> Status: <%= reg.user.is_team_manager ? 'Manager' : 'Member' %>" data-placement="bottom">
+                <a tabindex="0" role="button" data-trigger="focus" data-toggle="popover" title="User Information" data-content="Email: <%= reg.user.email %> Confirmed: <%= reg.user.confirmed_at.strftime('%l:%M %p %b %e %Y') %> Status: <%= reg.user.is_team_manager ? 'Manager' : 'Member' %>" data-placement="bottom">
                   <%= reg.user.first_name + ' ' + reg.user.last_name %>
                 </a>
               </td>
@@ -104,3 +103,4 @@
     $('[data-toggle="popover"]').popover()
   })
 </script>
+<%= console %>
