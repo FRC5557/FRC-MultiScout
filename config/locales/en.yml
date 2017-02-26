@@ -25,7 +25,7 @@ en:
     not_found: Team with number %{number} was not found. If you are sure you are entering it correctly, create your team's identity on FRC MultiScout.
     not_saved: An internal error prevented your team information from being saved.
     join_request: Successfully submitted request to join team %{number}.
-    request_cancel: Successfully cancelled request to join team.
+    request_cancel: Successfully removed team regisration.
     permissions: You do not have permission to manage this team.
     additional: You already have a team registration associated with your account.
     not_exist: You do not have a team registration associated with your account.

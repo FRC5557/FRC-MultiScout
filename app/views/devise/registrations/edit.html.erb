@@ -52,7 +52,7 @@
 
     <h3>Delete My Account</h3>
 
-    <p><%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?"}, method: :delete, class: "btn btn-danger" %></p>
+    <p><%= button_to "Delete Account", registration_path(resource_name), data: { confirm: "Are you sure?"}, method: :delete, class: "btn btn-danger" %></p>
   </div>
   <div class="col-lg-4 col-sm-5 col-xs-12">
     <div class="page-header">
@@ -102,6 +102,8 @@
       <%= link_to 'Cancel Join Team Request', team_registrations_path, method: :delete, class: 'btn btn-warning' %>
     <% else %>
       <p><em>You are a <%= current_user.is_team_manager ? 'manager' : 'member' %> of team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %>.</em></p>
+      <p>If you would like to leave the team, you can use the button below.</p>
+      <%= link_to 'Leave Team', team_registrations_path, method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure?"} %>
     <% end %>
   </div>
   <div class="col-lg-2 col-sm-1"></div>

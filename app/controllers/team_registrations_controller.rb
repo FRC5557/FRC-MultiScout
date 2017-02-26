@@ -52,7 +52,7 @@ class TeamRegistrationsController < ApplicationController
       if current_user.team_registration.nil?
         redirect_to edit_user_registration_path, alert: I18n.t('teams.not_exist')
       else
-        if current_user.team_registration.destroy
+        if current_user.team_registration.destroy && current_user.update(is_team_manager: false)
           redirect_to edit_user_registration_path, flash: {success: I18n.t('teams.request_cancel')}
         else
           redirect_to edit_user_registration_path, flash: {error: I18n.t('teams.not_saved')}
