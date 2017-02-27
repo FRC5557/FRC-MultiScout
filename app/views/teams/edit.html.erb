@@ -7,6 +7,7 @@
 
     <% if @team.scout_schema.nil? %>
       <p><em>Your team has not selected a scouting schematic.</em></p>
+      <% # TODO actually allow browsing schematics %>
       <p>Use the form below to quickly search for a scouting schematic, or <%= link_to 'click here', '/' %> to browse schematics in detail.</p>
 
       <%= form_tag({controller: :schematics, action: :update}, method: :patch, class: 'form-inline') do %>
@@ -25,6 +26,7 @@
     <% else %>
       <p><em>Your team is using the <%= @team.scout_schema.name %> scouting schematic.</em></p>
       <p>You can review its parameters by <%= link_to 'clicking here', '/' %>.</p>
+      <% # TODO actually allow browsing schematics %>
       <p>Use the form below to quickly search for another scouting schematic, or <%= link_to 'click here', '/' %> to browse schematics in detail.</p>
 
       <%= form_tag({controller: :schematics, action: :update}, method: :patch, class: 'form-inline') do %>

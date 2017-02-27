@@ -1,0 +1,18 @@
+<% if @events.count == 0 %>
+  <p><em>No events have been imported for <%= @year %>.</em></p>
+  <p>You can use the button below to import all events for this year</p>
+  <p><%= link_to 'Import ' + @year + ' Events', admin_tba_import_events_path, method: :post, class: 'btn btn-primary' %></p>
+<% else %>
+  <p><em><%= pluralize(@events.count, 'event') %> have been imported for <%= @year %>.</em></p>
+  <p>
+    You can use the 'Events' tab of the admin panel to manage individual events.
+    The buttons below can be used to complete quick actions.
+  </p>
+  <p>
+    <div class="btn-group">
+      <%= link_to 'Update ' + @year + ' Events', admin_tba_update_events_path, method: :post, class: 'btn btn-info' %>
+      <%= link_to 'Reset All ' + @year + ' Events', admin_tba_reset_events_path, method: :post, class: 'btn btn-warning' %>
+      <%= link_to 'Delete All ' + @year + ' Events', admin_tba_delete_events_path, method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure?'} %>
+    </div>
+  </p>
+<% end %>

@@ -36,3 +36,12 @@ en:
     member_promote: Member successfully promoted.
     member_demote: Member successfully demoted.
     schema_success: Schematic successfully chosen.
+    schema_not_exist: That schematic does not exist.
+  admin:
+    sign_in: You must be signed in to access the administrator interface.
+    permissions: You do not have permission to manage the website.
+    event_import_success: Events successfully imported from The Blue Alliance.
+    event_import_error: Some events were not imported successfully.
+    event_update_success: Update affected %{plural}.
+    event_reset_success: Events successfully reset with data from The Blue Alliance.
+    event_delete_success: Events deleted successfully.

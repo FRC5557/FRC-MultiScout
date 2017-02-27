@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+  <li class='<%= "active" if params[:action] == "index" %>'><%= link_to 'Summary', admin_root_path %></li>
+  <li class='<%= "active" if params[:action] == "tba_imports" %>'><%= link_to 'TBA Imports', admin_tba_imports_path %></li>
+</ul>
+<br/>

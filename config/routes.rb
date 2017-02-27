@@ -8,6 +8,15 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'scout#index'
 
+  namespace :admin do
+    root 'panel#index'
+    get '/tba_imports' => 'panel#tba_imports', as: :tba_imports
+    post '/tba_imports/events' => 'import#import_events', as: :tba_import_events
+    post '/tba_imports/events/update' => 'import#update_events', as: :tba_update_events
+    post '/tba_imports/events/reset' => 'import#reset_events', as: :tba_reset_events
+    delete '/tba_imports/events/delete' => 'import#delete_events', as: :tba_delete_events
+  end
+
   scope :team_registrations do
     post '/' => 'team_registrations#create', as: :team_registrations
     delete '/' => 'team_registrations#destroy'
