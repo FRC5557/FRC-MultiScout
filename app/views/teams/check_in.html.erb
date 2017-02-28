@@ -5,19 +5,29 @@
       <h2>Check In</h2>
     </div>
 
-    <% if current_user.is_checked_in %>
-      <p><em>You are currently marked as an active scout.</em></p>
-    <% else %>
-      <p><em>You are currently marked as an inactive scout.</em></p>
-    <% end %>
-
     <center>
-      <% if current_user.is_checked_in %>
-        <%= link_to '<i class="fa fa-times"></i> Set Inactive Status'.html_safe, check_in_inactive_path, method: :post, class: 'btn btn-lg btn-warning' %>
-      <% else %>
-        <%= link_to '<i class="fa fa-check"></i> Set Active Status'.html_safe, check_in_active_path, method: :post, class: 'btn btn-lg btn-success' %>
-      <% end %>
+      <div class="btn-group btn-group-lg">
+        <% if current_user.is_checked_in %>
+          <button type="button" class="btn btn-success btn-lg" disabled="disabled"><i class="fa fa-check"></i> Currently Checked In</button>
+          <%= link_to 'Check Out'.html_safe, check_in_inactive_path, method: :post, class: 'btn btn-lg btn-warning' %>
+        <% else %>
+        <button type="button" class="btn btn-danger btn-lg" disabled="disabled"><i class="fa fa-times"></i> Not Currently Checked In</button>
+          <%= link_to 'Check In'.html_safe, check_in_active_path, method: :post, class: 'btn btn-lg btn-success' %>
+        <% end %>
+      </div>
     </center>
+
+    <h4>Pit Scout Queue</h4>
+    <table class="table">
+      <tr>
+        <th>Team Number</th>
+        <% current_user.empty_event_pit_data.each do |datum| %>
+          <td><%= datum.number %></td>
+        <% end %>
+      </tr>
+    </table>
+
+    <h4>Match Scout Assignments</h4>
 
   </div>
   <div class="col-lg-2 col-sm-1"></div>

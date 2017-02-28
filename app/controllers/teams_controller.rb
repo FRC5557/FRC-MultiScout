@@ -35,10 +35,34 @@ class TeamsController < ApplicationController
     unless user_signed_in?
       redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
     end
+    if current_user.team_registration.team.nil?
+      redirect_to edit_user_registration_path, alert: I18n.t('teams.not_exist')
+    end
+
+    if current_user.is_checked_in
+      if current_user.empty_event_pit_data.count < 6
+        num_to_add = 6 - current_user.empty_event_pit_data.count
+
+        pit_data = current_user.team_registration.team.event.pit_data.where('user_id IS NULL').limit(num_to_add)
+
+        pit_data.each do |data|
+          data.update(user_id: current_user.id)
+        end
+      end
+    else
+      pit_data = current_user.empty_event_pit_data
+
+      pit_data.each do |data|
+        data.update(user_id: nil)
+      end
+    end
   end
 
   def check_in_active
     if user_signed_in?
+      if current_user.team_registration.team.nil?
+        redirect_to edit_user_registration_path, alert: I18n.t('teams.not_exist')
+      end
       current_user.update(is_checked_in: true)
       redirect_to check_in_path
     else
@@ -48,6 +72,9 @@ class TeamsController < ApplicationController
 
   def check_in_inactive
     if user_signed_in?
+      if current_user.team_registration.team.nil?
+        redirect_to edit_user_registration_path, alert: I18n.t('teams.not_exist')
+      end
       current_user.update(is_checked_in: false)
       redirect_to check_in_path
     else
