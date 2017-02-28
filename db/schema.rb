@@ -42,7 +42,8 @@ ActiveRecord::Schema.define(version: 20170228011534) do
 
   create_table "scout_schemas", force: :cascade do |t|
     t.string   "name",                        null: false
-    t.text     "data",        default: "{}",  null: false
+    t.text     "pit_data",    default: "{}",  null: false
+    t.text     "match_data",  default: "{}",  null: false
     t.boolean  "is_official", default: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
