@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-lg-2 col-sm-1"></div>
+  <div class="col-xs-12 col-sm-10 col-lg-8">
+    <div class="page-header">
+      <h2>Check In</h2>
+    </div>
+
+    <% if current_user.is_checked_in %>
+      <p><em>You are currently marked as an active scout.</em></p>
+    <% else %>
+      <p><em>You are currently marked as an inactive scout.</em></p>
+    <% end %>
+
+    <center>
+      <% if current_user.is_checked_in %>
+        <%= link_to '<i class="fa fa-times"></i> Set Inactive Status'.html_safe, check_in_inactive_path, class: 'btn btn-lg btn-warning' %>
+      <% else %>
+        <%= link_to '<i class="fa fa-check"></i> Set Active Status'.html_safe, check_in_active_path, class: 'btn btn-lg btn-success' %>
+      <% end %>
+    </center>
+
+  </div>
+  <div class="col-lg-2 col-sm-1"></div>
+</div>

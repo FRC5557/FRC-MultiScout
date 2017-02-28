@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20170226183934) do
     t.string   "unconfirmed_email"
     t.boolean  "is_team_manager",        default: false, null: false
     t.boolean  "is_administrator",       default: false, null: false
+    t.boolean  "is_checked_in",          default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

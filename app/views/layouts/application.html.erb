@@ -29,12 +29,18 @@
             <li class="<%= 'active' if params[:action] == 'index' && params[:controller] == 'scout' %>">
               <%= link_to "<i class='fa fa-home'></i> Home".html_safe, root_path %>
             </li>
-            <% if user_signed_in? %>
-              <li class='dropdown'>
+            <% if user_signed_in? && !current_user.team_registration.nil? && current_user.team_registration.current_reg? %>
+              <li class='dropdown <%= "active" if params[:controller] == "teams" %>'>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                   <i class="fa fa-users"></i> My Team <span class="caret"></span>
                 </a>
                 <ul class='dropdown-menu'>
+                  <li class="<%= 'active' if params[:action] == 'show' && params[:controller] == 'teams' %>">
+                    <%= link_to '<i class="fa fa-bars"></i> Profile'.html_safe, team_path(current_user.team_registration.team.number) %>
+                  </li>
+                  <li class="<%= 'active' if params[:action] == 'check_in' && params[:controller] == 'teams' %>">
+                    <%= link_to '<i class="fa fa-check"></i> Check In'.html_safe, check_in_path %>
+                  </li>
                   <% if current_user.is_team_manager && !current_user.team_registration.nil? && current_user.team_registration.current_reg? %>
                     <li class="<%= 'active' if params[:action] == 'edit' && params[:controller] == 'teams' %>">
                       <%= link_to '<i class="fa fa-cog"></i> Manage Team'.html_safe, edit_team_path(current_user.team_registration.team.number) %>

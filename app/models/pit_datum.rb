@@ -1,0 +1,2 @@
+class PitDatum < ApplicationRecord
+end

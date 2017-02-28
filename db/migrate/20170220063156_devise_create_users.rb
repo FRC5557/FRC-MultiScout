@@ -32,6 +32,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.0]
       ## Team information
       t.boolean :is_team_manager, null: false, default: false
       t.boolean :is_administrator, null: false, default: false
+      t.boolean :is_checked_in, null: false, default: false
 
       ## Lockable
       # t.integer  :failed_attempts, default: 0, null: false # Only if lock strategy is :failed_attempts
