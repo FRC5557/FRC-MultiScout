@@ -41,17 +41,29 @@
       <% # TODO actually allow browsing events %>
       <p>Use the form below to quickly search for another event, or <%= link_to 'click here', '/' %> to browse events in detail.</p>
     <% end %>
-    <%= form_tag({controller: :events, action: :update}, method: :patch, class: 'form-inline') do %>
-      <div class="form-group">
-        <%= label_tag :event, "Event Name" %>
-        <%= text_field_tag :event, '', list: "events", class: "form-control" %>
-        <datalist id="events">
-          <% Event.all.each do |event| %>
-            <option value="<%= event.name %> (<%= event.key %>)"></option>
-          <% end %>
-        </datalist>
-      </div>
-      <%= submit_tag "Select Event", class: "btn btn-default" %>
+    <p>
+      <%= form_tag({controller: :events, action: :update}, method: :patch, class: 'form-inline') do %>
+        <div class="form-group">
+          <%= label_tag :event, "Event Name" %>
+          <%= text_field_tag :event, '', list: "events", class: "form-control" %>
+          <datalist id="events">
+            <% Event.all.each do |event| %>
+              <option value="<%= event.name %> (<%= event.key %>)"></option>
+            <% end %>
+          </datalist>
+        </div>
+        <%= submit_tag "Select Event", class: "btn btn-default" %>
+      <% end %>
+    </p>
+
+    <% if !@team.event.nil? %>
+      <% if @team.pit_data.where(event_id: @team.event.id).count == 0 %>
+        <p>You must import the teams participating in your event into the database in order to scout. Use the button below to do this.</p>
+        <%= link_to 'Import Teams', team_import_pits_path, method: :post, class: 'btn btn-primary' %>
+      <% else %>
+        <p>You can use the button below to refresh the teams attending your event.</p>
+        <%= link_to 'Update Teams', team_import_pits_path, method: :post, class: 'btn btn-info' %>
+      <% end %>
     <% end %>
   </div>
 

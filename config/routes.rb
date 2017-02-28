@@ -8,9 +8,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'scout#index'
 
-  get '/teams/check_in' => 'teams#check_in', as: :check_in
-  get '/teams/check_in/active' => 'teams#check_in_active', as: :check_in_active
-  get '/teams/check_in/inactive' => 'teams#check_in_inactive', as: :check_in_inactive
+  scope :teams do
+    get '/check_in' => 'teams#check_in', as: :check_in
+    post '/check_in/active' => 'teams#check_in_active', as: :check_in_active
+    post '/check_in/inactive' => 'teams#check_in_inactive', as: :check_in_inactive
+    post '/import_pit_data' => 'teams#import_pit_data', as: :team_import_pits
+  end
 
   namespace :admin do
     root 'panel#index'

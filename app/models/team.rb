@@ -1,5 +1,6 @@
 class Team < ApplicationRecord
   has_many :team_registrations
+  has_many :pit_data
   belongs_to :scout_schema
   belongs_to :event
 

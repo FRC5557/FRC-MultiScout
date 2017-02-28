@@ -3,7 +3,7 @@ class Admin::ImportController < ApplicationController
   def import_events
     year = Time.current.strftime("%Y")
     url = "https://www.thebluealliance.com/api/v2/events/" + year
-    response = request_with_headers(url, {'X-TBA-App-Id':'frc5557:scouting-system:a1'}, true)
+    response = tba_request(url)
     data = JSON.parse(response.body)
     error = false
 
@@ -23,7 +23,7 @@ class Admin::ImportController < ApplicationController
   def update_events
     year = Time.current.strftime("%Y")
     url = "https://www.thebluealliance.com/api/v2/events/" + year
-    response = request_with_headers(url, {'X-TBA-App-Id':'frc5557:scouting-system:a1'}, true)
+    response = tba_request(url)
     data = JSON.parse(response.body)
     error = false
     count = 0
@@ -51,7 +51,7 @@ class Admin::ImportController < ApplicationController
 
     year = Time.current.strftime("%Y")
     url = "https://www.thebluealliance.com/api/v2/events/" + year
-    response = request_with_headers(url, {'X-TBA-App-Id':'frc5557:scouting-system:a1'}, true)
+    response = tba_request(url)
     data = JSON.parse(response.body)
     error = false
 

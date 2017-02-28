@@ -20,4 +20,8 @@ module HTTPUtil
 
     return response
   end
+
+  def tba_request(url)
+    return request_with_headers(url, {'X-TBA-App-Id':'frc5557:scouting-system:a1'}, true)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170226183934) do
+ActiveRecord::Schema.define(version: 20170228011534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,20 @@ ActiveRecord::Schema.define(version: 20170226183934) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_events_on_key", unique: true, using: :btree
+  end
+
+  create_table "pit_data", force: :cascade do |t|
+    t.integer  "team_id"
+    t.integer  "event_id"
+    t.integer  "user_id"
+    t.integer  "number",     null: false
+    t.text     "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_pit_data_on_event_id", using: :btree
+    t.index ["number"], name: "index_pit_data_on_number", unique: true, using: :btree
+    t.index ["team_id"], name: "index_pit_data_on_team_id", using: :btree
+    t.index ["user_id"], name: "index_pit_data_on_user_id", using: :btree
   end
 
   create_table "scout_schemas", force: :cascade do |t|

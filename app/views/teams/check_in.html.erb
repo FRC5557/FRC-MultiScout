@@ -13,9 +13,9 @@
 
     <center>
       <% if current_user.is_checked_in %>
-        <%= link_to '<i class="fa fa-times"></i> Set Inactive Status'.html_safe, check_in_inactive_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to '<i class="fa fa-times"></i> Set Inactive Status'.html_safe, check_in_inactive_path, method: :post, class: 'btn btn-lg btn-warning' %>
       <% else %>
-        <%= link_to '<i class="fa fa-check"></i> Set Active Status'.html_safe, check_in_active_path, class: 'btn btn-lg btn-success' %>
+        <%= link_to '<i class="fa fa-check"></i> Set Active Status'.html_safe, check_in_active_path, method: :post, class: 'btn btn-lg btn-success' %>
       <% end %>
     </center>
 
