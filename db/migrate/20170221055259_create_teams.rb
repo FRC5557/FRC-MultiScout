@@ -4,6 +4,7 @@ class CreateTeams < ActiveRecord::Migration[5.0]
       t.integer :number, null: false
       t.string :name
       t.references :scout_schema
+      t.references :event
 
       t.timestamps
     end

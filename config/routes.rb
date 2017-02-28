@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   resources :teams
   resources :schematics
+  resources :events
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

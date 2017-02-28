@@ -50,8 +50,10 @@ ActiveRecord::Schema.define(version: 20170226183934) do
     t.integer  "number",          null: false
     t.string   "name"
     t.integer  "scout_schema_id"
+    t.integer  "event_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["event_id"], name: "index_teams_on_event_id", using: :btree
     t.index ["scout_schema_id"], name: "index_teams_on_scout_schema_id", using: :btree
   end
 
