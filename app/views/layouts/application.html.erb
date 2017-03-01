@@ -38,10 +38,12 @@
                   <li class="<%= 'active' if params[:action] == 'show' && params[:controller] == 'teams' %>">
                     <%= link_to '<i class="fa fa-bars"></i> Profile'.html_safe, team_path(current_user.team_registration.team.number) %>
                   </li>
-                  <li class="<%= 'active' if params[:action] == 'check_in' && params[:controller] == 'teams' %>">
-                    <%= link_to '<i class="fa fa-check"></i> Check In'.html_safe, check_in_path %>
-                  </li>
-                  <% if current_user.is_team_manager && !current_user.team_registration.nil? && current_user.team_registration.current_reg? %>
+                  <% if !current_user.team.event.nil? %>
+                    <li class="<%= 'active' if params[:action] == 'check_in' && params[:controller] == 'teams' %>">
+                      <%= link_to '<i class="fa fa-check"></i> Check In'.html_safe, check_in_path %>
+                    </li>
+                  <% end %>
+                  <% if current_user.is_team_manager %>
                     <li class="<%= 'active' if params[:action] == 'edit' && params[:controller] == 'teams' %>">
                       <%= link_to '<i class="fa fa-cog"></i> Manage Team'.html_safe, edit_team_path(current_user.team_registration.team.number) %>
                     </li>

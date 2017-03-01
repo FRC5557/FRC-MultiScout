@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170228011534) do
+ActiveRecord::Schema.define(version: 20170228163829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,24 @@ ActiveRecord::Schema.define(version: 20170228011534) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_events_on_key", unique: true, using: :btree
+  end
+
+  create_table "match_data", force: :cascade do |t|
+    t.integer  "team_id"
+    t.integer  "event_id"
+    t.integer  "user_id"
+    t.integer  "competition_stage", null: false
+    t.integer  "set_number",        null: false
+    t.integer  "match_number",      null: false
+    t.integer  "team_number",       null: false
+    t.string   "station"
+    t.string   "match_time"
+    t.text     "data"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["event_id"], name: "index_match_data_on_event_id", using: :btree
+    t.index ["team_id"], name: "index_match_data_on_team_id", using: :btree
+    t.index ["user_id"], name: "index_match_data_on_user_id", using: :btree
   end
 
   create_table "pit_data", force: :cascade do |t|
@@ -42,8 +60,8 @@ ActiveRecord::Schema.define(version: 20170228011534) do
 
   create_table "scout_schemas", force: :cascade do |t|
     t.string   "name",                        null: false
-    t.text     "pit_data",    default: "{}",  null: false
-    t.text     "match_data",  default: "{}",  null: false
+    t.text     "pit_data",                    null: false
+    t.text     "match_data",                  null: false
     t.boolean  "is_official", default: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
@@ -62,12 +80,13 @@ ActiveRecord::Schema.define(version: 20170228011534) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.integer  "number",          null: false
+    t.integer  "number",            null: false
     t.string   "name"
     t.integer  "scout_schema_id"
     t.integer  "event_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "scout_assignments"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.index ["event_id"], name: "index_teams_on_event_id", using: :btree
     t.index ["scout_schema_id"], name: "index_teams_on_scout_schema_id", using: :btree
   end

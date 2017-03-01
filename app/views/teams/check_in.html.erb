@@ -15,20 +15,68 @@
           <%= link_to 'Check In'.html_safe, check_in_active_path, method: :post, class: 'btn btn-lg btn-success' %>
         <% end %>
       </div>
+      <% if !current_user.is_checked_in %>
+        <p><em>You must be checked in to see your scouting queue and assignments.</em></p>
+      <% end %>
     </center>
 
-    <h4>Pit Scout Queue</h4>
-    <table class="table">
-      <tr>
-        <th>Team Number</th>
-        <% current_user.empty_event_pit_data.each do |datum| %>
-          <td><%= datum.number %></td>
+    <% if current_user.is_checked_in && current_user.event.pit_data.where('event_id=?', current_user.team.event.id).count > 0 %>
+      <h4>Pit Scout Queue</h4>
+      <% if current_user.empty_event_pit_data.count > 0 %>
+        <table class="table table-responsive table-bordered" style="text-align: center;">
+          <tbody>
+            <tr>
+              <th>Team Number</th>
+              <% current_user.empty_event_pit_data.each do |datum| %>
+                <td><%= datum.number %></td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      <% else %>
+        <p><em><strong>Your team's pit scouting is complete!</strong></em></p>
+      <% end %>
+
+      <h4>Match Scout Assignments</h4>
+      <p>
+        <em><strong>You are scouting teams at the <%= current_user.match_scout_assignment.gsub('_', ' ').capitalize %> driver station.</strong></em>
+      </p>
+      <% if current_user.event.match_data.where('team_id=?', current_user.team.id).count > 0 %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Match</th>
+              <th>Match Time</th>
+              <th>Team Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user_match_scout_list.each do |datum| %>
+              <tr>
+                <td>
+                  <%= stage_name(datum.competition_stage) %>
+                  <%= datum.set_number if datum.competition_stage != 1 %>
+                  Match #<%= datum.match_number %>
+                </td>
+                <td><%= datum.match_time %></td>
+                <td><%= datum.team_number %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @user_match_scout_list, param_name: :page, window: 2 %>
+      <% else %>
+        <% if @empty %>
+          <p>Match information is not yet available.</p>
+        <% else %>
+          <p>Your team manager has not imported match data yet.</p>
         <% end %>
-      </tr>
-    </table>
-
-    <h4>Match Scout Assignments</h4>
-
+      <% end %>
+    <% else %>
+      <% if current_user.is_checked_in %>
+        <center><p><em>A team manager must import a team list for the event before you can view scouting queues.</em></p></center>
+      <% end %>
+    <% end %>
   </div>
   <div class="col-lg-2 col-sm-1"></div>
 </div>

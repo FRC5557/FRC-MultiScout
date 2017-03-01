@@ -59,10 +59,22 @@
     <% if !@team.event.nil? %>
       <% if @team.pit_data.where(event_id: @team.event.id).count == 0 %>
         <p>You must import the teams participating in your event into the database in order to scout. Use the button below to do this.</p>
-        <%= link_to 'Import Teams', team_import_pits_path, method: :post, class: 'btn btn-primary' %>
+        <p><%= link_to 'Import Teams', team_import_pits_path, method: :post, class: 'btn btn-primary' %></p>
       <% else %>
         <p>You can use the button below to refresh the teams attending your event.</p>
-        <%= link_to 'Update Teams', team_import_pits_path, method: :post, class: 'btn btn-info' %>
+        <p><%= link_to 'Update Teams', team_import_pits_path, method: :post, class: 'btn btn-info' %></p>
+      <% end %>
+
+      <% if @matches.empty? %>
+        <p>A match list for your event is not yet available. Please check back later.</p>
+      <% else %>
+        <% if @team.match_data.where(event_id: @team.event.id).count == 0 %>
+        <p>You must import match data for your event.</p>
+        <p><%= link_to 'Import Matches', team_import_matches_path, method: :post, class: 'btn btn-primary' %></p>
+      <% else %>
+        <p>You can use the button below to refresh match data for your event.</p>
+        <p><%= link_to 'Update Matches', team_import_matches_path, method: :post, class: 'btn btn-info' %></p>
+      <% end %>
       <% end %>
     <% end %>
   </div>

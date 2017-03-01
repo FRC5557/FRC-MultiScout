@@ -8,7 +8,18 @@ class SchematicsController < ApplicationController
           redirect_to root_path, alert: I18n.t('teams.not_exist')
         else
           if (current_user.is_team_manager && current_user.team_registration.team.id == params[:team].to_i) || current_user.is_administrator
-            if team.update(scout_schema_id: schema.id)
+            alliances = eval(schema.match_data)["alliances"]
+            scout_assignments = Hash.new
+
+            alliances.each do |a|
+              c = 1
+              a[1].times do
+                scout_assignments[(a[0] + '_' + c.to_s).to_param] = nil
+                c += 1
+              end
+            end
+
+            if team.update(scout_schema_id: schema.id) && team.update(scout_assignments: scout_assignments)
               redirect_to edit_team_path(team.number), flash: {success: I18n.t('teams.schema_success')}
             else
               redirect_to edit_team_path(team.number), flash: {success: I18n.t('teams.not_saved')}
