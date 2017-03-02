@@ -48,17 +48,17 @@ class TeamsController < ApplicationController
               pit_data.each do |data|
                 data.update(user_id: current_user.id)
               end
+            end
 
-              unless current_user.has_match_scout_assignment?
-                match_scouts = current_user.team.match_scout_assignments
-                match_scouts.each do |station|
-                  if station[1] == nil
-                    match_scouts[station[0]] = current_user.id
-                    break
-                  end
+            unless current_user.has_match_scout_assignment?
+              match_scouts = current_user.team.match_scout_assignments
+              match_scouts.each do |station|
+                if station[1] == nil
+                  match_scouts[station[0]] = current_user.id
+                  break
                 end
-                current_user.team.update(scout_assignments: match_scouts.to_s)
               end
+              current_user.team.update(scout_assignments: match_scouts.to_s)
             end
 
             @empty = JSON.parse(tba_request('https://www.thebluealliance.com/api/v2/event/' + current_user.event.key + '/matches').body).empty?

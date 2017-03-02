@@ -49,4 +49,5 @@ en:
     sign_in: You must be signed in to scout.
     must_have_team: You must be a confirmed member on a team to scout.
     must_have_event: Your team must select which event they are scouting.
+    must_check_in: You must be checked in order to scout.
     submit_success: You successfully submitted the report for team(s) %{numbers}. If there are more teams left to scout, you will get an additional team in your queue.

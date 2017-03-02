@@ -21,7 +21,9 @@
     </center>
 
     <% if current_user.is_checked_in && current_user.event.pit_data.where('event_id=?', current_user.team.event.id).count > 0 %>
-      <h4>Pit Scout Queue <%= link_to '&raquo; Pit Scout Now &raquo;'.html_safe, pit_scout_path, class: 'btn btn-xs btn-primary' %></h4>
+      <h4>Pit Scout Queue
+        <% if current_user.empty_event_pit_data.count > 0 %><%= link_to '&raquo; Pit Scout Now &raquo;'.html_safe, pit_scout_path, class: 'btn btn-xs btn-primary' %><% end %>
+      </h4>
       <% if current_user.empty_event_pit_data.count > 0 %>
         <table class="table table-responsive table-bordered" style="text-align: center;">
           <tbody>
@@ -37,9 +39,15 @@
         <p><em><strong>Your team's pit scouting is complete!</strong></em></p>
       <% end %>
 
-      <h4>Match Scout Assignments <%= link_to '&raquo; Match Scout Now &raquo;'.html_safe, match_scout_path, class: 'btn btn-xs btn-primary' %></h4>
+      <h4>Match Scout Assignments
+        <% unless current_user.match_scout_assignment.nil? %><%= link_to '&raquo; Match Scout Now &raquo;'.html_safe, match_scout_path, class: 'btn btn-xs btn-primary' %><% end %>
+      </h4>
       <p>
-        <em><strong>You are scouting teams at the <%= current_user.match_scout_assignment.gsub('_', ' ').capitalize %> driver station.</strong></em>
+        <% if current_user.match_scout_assignment.nil? %>
+          <em>All scouting assignments are currently filled. If this is not intended, make sure the person you are replacing checked out.</em>
+        <% else %>
+          <em><strong>You are scouting teams at the <%= current_user.match_scout_assignment.gsub('_', ' ').capitalize %> driver station.</strong></em>
+        <% end %>
       </p>
       <% if current_user.event.match_data.where('team_id=?', current_user.team.id).count > 0 %>
         <table class="table table-responsive table-bordered">

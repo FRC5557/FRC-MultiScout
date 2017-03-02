@@ -98,7 +98,22 @@ class ScoutController < ApplicationController
         if current_user.event.nil?
           redirect_back fallback_location: root_path, alert: I18n.t('scout.must_have_event')
         else
-          # TODO
+          if current_user.is_checked_in
+            unless current_user.has_match_scout_assignment?
+              match_scouts = current_user.team.match_scout_assignments
+              match_scouts.each do |station|
+                if station[1] == nil
+                  match_scouts[station[0]] = current_user.id
+                  break
+                end
+              end
+              current_user.team.update(scout_assignments: match_scouts.to_s)
+            end
+
+            
+          else
+            redirect_to check_in_path, alert: I18n.t('scout.must_check_in')
+          end
         end
       end
     else
