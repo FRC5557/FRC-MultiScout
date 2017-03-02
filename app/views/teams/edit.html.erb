@@ -138,16 +138,16 @@
               <td>
                 <div class="btn-group">
                   <% if reg.user.is_checked_in %>
-                    <%= link_to 'Check Out', team_registrations_check_out_path(reg), class: 'btn btn-xs btn-primary' %>
+                    <%= link_to '<i class="fa fa-times"></i>'.html_safe, team_registrations_check_out_path(reg), class: 'btn btn-xs btn-primary' %>
                   <% else %>
-                    <%= link_to 'Check In', team_registrations_check_in_path(reg), class: 'btn btn-xs btn-primary' %>
+                    <%= link_to '<i class="fa fa-check"></i>'.html_safe, team_registrations_check_in_path(reg), class: 'btn btn-xs btn-primary' %>
                   <% end %>
                   <% if reg.user.is_team_manager %>
-                    <%= link_to 'Demote', team_registrations_demote_path(reg), class: 'btn btn-xs btn-info' %>
+                    <%= link_to '<i class="fa fa-arrow-down"></i>'.html_safe, team_registrations_demote_path(reg), class: 'btn btn-xs btn-info' %>
                   <% else %>
-                    <%= link_to 'Promote', team_registrations_promote_path(reg), class: 'btn btn-xs btn-info' %>
+                    <%= link_to '<i class="fa fa-arrow-up"></i>'.html_safe, team_registrations_promote_path(reg), class: 'btn btn-xs btn-info' %>
                   <% end %>
-                  <%= link_to 'Remove', team_registrations_remove_path(reg), class: 'btn btn-xs btn-danger' %>
+                  <%= link_to '<i class="fa fa-trash"></i>'.html_safe, team_registrations_remove_path(reg), class: 'btn btn-xs btn-danger' %>
                 </div>
               </td>
             </tr>
