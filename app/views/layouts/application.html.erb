@@ -36,9 +36,11 @@
                     <i class="fa fa-search"></i> Scouting <span class="caret"></span>
                   </a>
                   <ul class='dropdown-menu'>
-                    <li class="<%= 'active' if params[:action] == 'pit_scout' %>">
-                      <%= link_to '<i class="fa fa-archive"></i> Pit Scouting'.html_safe, pit_scout_path %>
-                    </li>
+                    <% if current_user.empty_event_pit_data.count > 0 %>
+                      <li class="<%= 'active' if params[:action] == 'pit_scout' %>">
+                        <%= link_to '<i class="fa fa-archive"></i> Pit Scouting'.html_safe, pit_scout_path %>
+                      </li>
+                    <% end %>
                     <li class="<%= 'active' if params[:action] == 'match_scout' %>">
                       <%= link_to '<i class="fa fa-car"></i> Match Scouting'.html_safe, match_scout_path %>
                     </li>

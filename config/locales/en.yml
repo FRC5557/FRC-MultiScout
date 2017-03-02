@@ -52,3 +52,4 @@ en:
     must_check_in: You must be checked in order to scout.
     submit_success: You successfully submitted the report for team(s) %{numbers}. If there are more teams left to scout, you will get an additional team in your queue.
     submit_match_success: You successfully submitted the report for match(es) %{mids}.
+    no_more_pits: There are no more pits to scout.

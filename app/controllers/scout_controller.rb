@@ -22,8 +22,11 @@ class ScoutController < ApplicationController
                 data.update(user_id: current_user.id)
               end
             end
-
-            @pit_queue = current_user.empty_event_pit_data.select(:number, :data)
+            if current_user.empty_event_pit_data.count > 0
+              @pit_queue = current_user.empty_event_pit_data.select(:number, :data)
+            else
+              redirect_to check_in_path, alert: I18n.t('scout.no_more_pits')
+            end
           else
             redirect_to check_in_path, alert: I18n.t('scout.must_check_in')
           end
