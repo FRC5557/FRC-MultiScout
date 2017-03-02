@@ -81,5 +81,5 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :mailgun
 
   # Set production URL
-  config.action_mailer.default_url_options = { :host => "frc-multiscout.herokuapp.com" }
+  config.action_mailer.default_url_options = { :host => "frc-multiscout-dev.herokuapp.com" }
 end
