@@ -126,6 +126,12 @@ function checkOnline() {
   });
 }
 
+function saveMatch(mid) {
+  localStorage.setItem('match_' + mid, JSON.stringify($('#matchform_' + mid).serializeArray()));
+  $("#saved_" + mid).fadeIn();
+  window.setTimeout(function(){ $("#saved_" + mid).fadeOut(); }, 2000);
+}
+
 function saveTeam(number) {
   localStorage.setItem('team_' + number, JSON.stringify($('#teamform_' + number).serializeArray()));
   $("#saved_" + number).fadeIn();
@@ -134,6 +140,27 @@ function saveTeam(number) {
 
 function clearTeam(number) {
   localStorage.removeItem('team_'+ number)
+}
+
+function restoreMatch(mid) {
+  var data = localStorage.getItem('match_' + mid);
+  if (data != null) {
+    var array = JSON.parse(data);
+    for(var i = 0; i < array.length; i++) {
+      var value = array[i];
+      var id = value.name.replace(new RegExp('\\[','g'),'_').replace(new RegExp('\\]', 'g'),'')
+      if (value.name.includes('_select')) {
+        $('#' + id + '_' + value.value).prop('checked', true);
+      } else if(value.name.includes('_check')) {
+        $('#' + id).prop('checked', true);
+      } else if(value.name.includes('_counter')) {
+        $('#' + id).val(value.value);
+        $('#' + id + '_disp').html(value.value);
+      } else {
+        $('#' + id).val(value.value);
+      }
+    }
+  }
 }
 
 function restoreTeam(number) {
@@ -151,6 +178,13 @@ function restoreTeam(number) {
         $('#' + id).val(value.value);
       }
     }
+  }
+}
+
+function restoreAllMatches() {
+  for(var index = 0; index < match_queue.length; index++) {
+    var mid = match_queue[index].competition_stage + '_' + match_queue[index].set_number + '_' + match_queue[index].match_number
+    restoreMatch(mid);
   }
 }
 

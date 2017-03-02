@@ -102,6 +102,7 @@
       <%= link_to 'Cancel Join Team Request', team_registrations_path, method: :delete, class: 'btn btn-warning' %>
     <% else %>
       <p><em>You are a <%= current_user.is_team_manager ? 'manager' : 'member' %> of team <%= current_user.team_registration.team.number %> - <%= current_user.team_registration.team.name %>.</em></p>
+      <p>It is recommended to clear your local storage when scouting at different events. <a href="#" onclick="localStorage.clear();">Click here</a> to do so.</p>
       <p>If you would like to leave the team, you can use the button below.</p>
       <%= link_to 'Leave Team', team_registrations_path, method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure?"} %>
     <% end %>

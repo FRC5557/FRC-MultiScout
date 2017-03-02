@@ -122,5 +122,70 @@ class ScoutController < ApplicationController
   end
 
   def submit_match_scout
+    if user_signed_in?
+      if current_user.team_registration.nil? || !current_user.team_registration.current_reg?
+        redirect_back fallback_location: root_path, alert: I18n.t('scout.must_have_team')
+      else
+        if current_user.event.nil?
+          redirect_back fallback_location: root_path, alert: I18n.t('scout.must_have_event')
+        else
+          error = false
+          mids = ''
+          params[:match_data].each do |match_data|
+            mid = match_data.gsub('match', '')
+            stage = mid.split('_')[0]
+            set = mid.split('_')[1]
+            number = mid.split('_')[2]
+
+            mids += mid + ' '
+            data = {}
+
+            eval(current_user.team.scout_schema.match_data).each do |section|
+              next if section[0] == 'alliances'
+              section[1].each do |field|
+                case field[1][0]
+                when "select"
+                  input_data = params[:match_data][match_data.to_param][(field[0] + '_select').to_param]
+                  if input_data.nil?
+                    data[field[0].to_param] = nil
+                  else
+                    data[field[0].to_param] = field[1][1][input_data.to_i]
+                  end
+                when "checkbox"
+                  input_data = params[:match_data][match_data.to_param][(field[0] + '_check').to_param]
+                  if input_data.nil?
+                    data[field[0].to_param] = false
+                  else
+                    data[field[0].to_param] = true
+                  end
+                when "counter"
+                  input_data = params[:match_data][match_data.to_param][(field[0] + '_counter').to_param]
+                  if input_data.nil?
+                    data[field[0].to_param] = nil
+                  else
+                    data[field[0].to_param] = input_data
+                  end
+                else
+                  input_data = params[:match_data][match_data.to_param][field[0].to_param]
+                  data[field[0].to_param] = input_data
+                end
+              end
+            end
+
+            unless MatchDatum.where(competition_stage: stage, set_number: set, match_number: number, event_id: current_user.team.event.id, team_id: current_user.team.id).first.update(data: data.to_s, user_id: current_user.id)
+              error = true
+            end
+          end
+
+          if error
+            redirect_to match_scout_path, alert: I18n.t('scout.submit_error')
+          else
+            redirect_to match_scout_path, flash: {success: I18n.t('scout.submit_match_success', mids: mids)}
+          end
+        end
+      end
+    else
+      redirect_to new_user_session_path, alert: I18n.t('scout.sign_in')
+    end
   end
 end

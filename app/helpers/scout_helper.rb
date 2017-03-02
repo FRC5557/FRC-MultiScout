@@ -22,6 +22,10 @@ module ScoutHelper
     'match_data[match' + mid + '[' + str + '_check]]'
   end
 
+  def match_counter_namespace(str, mid)
+    'match_data[match' + mid + '[' + str + '_counter]]'
+  end
+
   def match_selectify_string_id(sid, mid)
     match_namespace(sid + '_select', mid)
   end

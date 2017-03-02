@@ -40,11 +40,11 @@
                       <%= number_field_tag match_namespace(field[0], match_id).to_param, '', class: "form-control" %>
                     </div>
                   <% when "counter" %>
-                    <p><%= hidden_field_tag match_namespace(field[0], match_id).to_param, 0 %>
+                    <p><%= hidden_field_tag match_counter_namespace(field[0], match_id).to_param, 0 %>
                     <div class='btn-group'>
-                      <button type="button" class='btn btn-success' onclick='increment("match_data_match<%= match_id %>_<%= field[0] %>");'>Increment <%= humanize(field[0]) %></button>
-                      <button id='match_data_match<%= match_id %>_<%= field[0] %>_disp' class='btn btn-success disabled' disabled='disabled'>0</button>
-                      <button type="button" class='btn btn-warning' onclick='decrement("match_data_match<%= match_id %>_<%= field[0] %>");'>-</button>
+                      <button type="button" class='btn btn-success' onclick='increment("match_data_match<%= match_id %>_<%= field[0] %>_counter");'>Increment <%= humanize(field[0]) %></button>
+                      <button id='match_data_match<%= match_id %>_<%= field[0] %>_counter_disp' class='btn btn-success disabled' disabled='disabled'>0</button>
+                      <button type="button" class='btn btn-warning' onclick='decrement("match_data_match<%= match_id %>_<%= field[0] %>_counter");'>-</button>
                     </div></p>
                   <% when "checkbox" %>
                     <div class="checkbox">
@@ -64,9 +64,9 @@
                 <% end %>
               <% end %>
             <% end %>
-            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true, onclick: 'clear(' + match_id + ')' %></p>
+            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true, onclick: 'clearMatch(' + match_id + ')' %></p>
           <% end %>
-          <p><button class='btn btn-warning' onclick="save('<%= match_id %>');">Save Data Locally</button> <span id="saved_<%= match_id %>" class='label label-success' style='display: none;'>Saved!</span></p>
+          <p><button class='btn btn-warning' onclick="saveMatch('<%= match_id %>');">Save Data Locally</button> <span id="saved_<%= match_id %>" class='label label-success' style='display: none;'>Saved!</span></p>
         </div>
       <% end %>
       <center>
