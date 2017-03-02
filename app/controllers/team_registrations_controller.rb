@@ -172,6 +172,24 @@ class TeamRegistrationsController < ApplicationController
         if (current_user.is_team_manager && current_user.team_registration.team.id == TeamRegistration.find(params[:id]).team.id) || current_user.is_administrator
           reg = TeamRegistration.find(params[:id])
           if reg.user.update(is_checked_in: true)
+            if reg.user.empty_event_pit_data.count < 6
+              num_to_add = 6 - reg.user.empty_event_pit_data.count
+              pit_data = reg.user.team_registration.team.event.pit_data.where('user_id IS NULL').limit(num_to_add)
+              pit_data.each do |data|
+                data.update(user_id: reg.user.id)
+              end
+            end
+
+            unless reg.user.has_match_scout_assignment?
+              match_scouts = reg.user.team.match_scout_assignments
+              match_scouts.each do |station|
+                if station[1] == nil
+                  match_scouts[station[0]] = reg.user.id
+                  break
+                end
+              end
+              current_user.team.update(scout_assignments: match_scouts.to_s)
+            end
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_in')}
           else
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {error: I18n.t('teams.not_saved')}
@@ -193,6 +211,17 @@ class TeamRegistrationsController < ApplicationController
         if (current_user.is_team_manager && current_user.team_registration.team.id == TeamRegistration.find(params[:id]).team.id) || current_user.is_administrator
           reg = TeamRegistration.find(params[:id])
           if reg.user.update(is_checked_in: false)
+            pit_data = reg.user.empty_event_pit_data
+            pit_data.each do |data|
+              data.update(user_id: nil)
+            end
+
+            match_scouts = reg.user.team.match_scout_assignments
+            match_scouts.each do |station|
+              if station[1] == reg.user.id
+                match_scouts[station[0].to_param] = nil
+              end
+            end
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_out')}
           else
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {error: I18n.t('teams.not_saved')}
