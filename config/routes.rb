@@ -43,6 +43,8 @@ Rails.application.routes.draw do
     get '/remove/:id' => 'team_registrations#remove', as: :team_registrations_remove
     get '/promote/:id' => 'team_registrations#promote', as: :team_registrations_promote
     get '/demote/:id' => 'team_registrations#demote', as: :team_registrations_demote
+    get '/check_in/:id' => 'team_registrations#check_in', as: :team_registrations_check_in
+    get '/check_out/:id' => 'team_registrations#check_out', as: :team_registrations_check_out
   end
 
   resources :teams

@@ -165,4 +165,46 @@ class TeamRegistrationsController < ApplicationController
       redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
     end
   end
+
+  def check_in
+    if user_signed_in?
+      if TeamRegistration.exists?(params[:id])
+        if (current_user.is_team_manager && current_user.team_registration.team.id == TeamRegistration.find(params[:id]).team.id) || current_user.is_administrator
+          reg = TeamRegistration.find(params[:id])
+          if reg.user.update(is_checked_in: true)
+            redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_in')}
+          else
+            redirect_to edit_team_path(current_user.team_registration.team.number), flash: {error: I18n.t('teams.not_saved')}
+          end
+        else
+          redirect_to root_path, alert: I18n.t('teams.permissions')
+        end
+      else
+        redirect_to root_path, alert: I18n.t('teams.reg_not_exist')
+      end
+    else
+      redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
+    end
+  end
+
+  def check_out
+    if user_signed_in?
+      if TeamRegistration.exists?(params[:id])
+        if (current_user.is_team_manager && current_user.team_registration.team.id == TeamRegistration.find(params[:id]).team.id) || current_user.is_administrator
+          reg = TeamRegistration.find(params[:id])
+          if reg.user.update(is_checked_in: false)
+            redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_out')}
+          else
+            redirect_to edit_team_path(current_user.team_registration.team.number), flash: {error: I18n.t('teams.not_saved')}
+          end
+        else
+          redirect_to root_path, alert: I18n.t('teams.permissions')
+        end
+      else
+        redirect_to root_path, alert: I18n.t('teams.reg_not_exist')
+      end
+    else
+      redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
+    end
+  end
 end

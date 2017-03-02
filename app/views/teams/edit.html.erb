@@ -137,6 +137,11 @@
               <td><% if reg.user.is_checked_in %><i class='fa fa-check'></i><% else %><i class='fa fa-times'></i><% end %></td>
               <td>
                 <div class="btn-group">
+                  <% if reg.user.is_checked_in %>
+                    <%= link_to 'Check Out', team_registrations_check_out_path(reg), class: 'btn btn-xs btn-primary' %>
+                  <% else %>
+                    <%= link_to 'Check In', team_registrations_check_in_path(reg), class: 'btn btn-xs btn-primary' %>
+                  <% end %>
                   <% if reg.user.is_team_manager %>
                     <%= link_to 'Demote', team_registrations_demote_path(reg), class: 'btn btn-xs btn-info' %>
                   <% else %>
