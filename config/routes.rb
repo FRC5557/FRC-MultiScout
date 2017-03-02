@@ -8,6 +8,14 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'scout#index'
 
+  get '/ping' => 'scout#ping'
+
+  scope :scout do
+    get '/pit' => 'scout#pit_scout', as: :pit_scout
+    post '/pit/submit' => 'scout#submit_pit_scout'
+    get '/match' => 'scout#match_scout', as: :match_scout
+  end
+
   scope :teams do
     get '/check_in' => 'teams#check_in', as: :check_in
     post '/check_in/active' => 'teams#check_in_active', as: :check_in_active

@@ -1,0 +1,77 @@
+<%= javascript_include_tag 'pit_scout' %>
+<div class="row">
+  <div class="col-lg-2 col-sm-1"></div>
+  <div class="col-xs-12 col-sm-10 col-lg-8">
+    <div class="page-header">
+      <h2>Pit Scouting <span id="conn_status" class="label label-default">Loading...</span></h2>
+    </div>
+
+    <%= javascript_tag do %>
+      queue = <%= raw @pit_queue.to_json %>;
+      AUTH_TOKEN = document.getElementsByName('csrf-token')[0].getAttribute('content');
+    <% end %>
+
+    <div id="loading" style="display: none;">
+      <center><h3><i class='fa fa-refresh fa-spin'></i> Submitting</h3></center>
+    </div>
+    <div id="container">
+      <center><p>
+        <strong>Team <span class="id-pos">1</span> / <span class="id-total"><%= @pit_queue.size %></span></strong>
+      </p></center>
+      <% @pit_queue.each do |team| %>
+        <div id="team_<%= team.number %>" style="<%= 'display: none;' if team != @pit_queue.first %>">
+          <h3>Team <%= team.number %></h3>
+          <%= form_tag({controller: :scout, action: :submit_pit_scout}, method: :post, id: 'teamform_' + team.number.to_s) do %>
+            <% eval(current_user.team.scout_schema.pit_data).each do |section| %>
+              <h4><%= humanize(section[0]) %></h4>
+              <% section[1].each do |field| %>
+                <% case field[1][0] %>
+                  <% when "text" %>
+                    <div class="form-group">
+                      <%= label_tag pit_namespace(field[0], team.number).to_param, humanize(field[0]) %>
+                      <%= text_field_tag pit_namespace(field[0], team.number).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "text_area" %>
+                    <div class="form-group">
+                      <%= label_tag pit_namespace(field[0], team.number).to_param, humanize(field[0]) %>
+                      <%= text_area_tag pit_namespace(field[0], team.number).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "number" %>
+                    <div class="form-group">
+                      <%= label_tag pit_namespace(field[0], team.number).to_param, humanize(field[0]) %>
+                      <%= number_field_tag pit_namespace(field[0], team.number).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "checkbox" %>
+                    <div class="checkbox">
+                      <%= label_tag pit_checkbox_namespace(field[0], team.number).to_param do %>
+                        <%= check_box_tag pit_checkbox_namespace(field[0], team.number).to_param %> <%= humanize(field[0]) %>
+                      <% end %>
+                    </div>
+                  <% when "select" %>
+                    <p><strong><%= humanize(field[0]) %></strong></p>
+                    <% select_id = 0 %>
+                    <p><% field[1][1].each do |select| %>
+                      <%= label_tag selectify_string_id_option(field[0], select_id.to_s, team.number).to_param, class: 'radio-inline' do %>
+                        <%= radio_button_tag selectify_string_id(field[0], team.number).to_param, select_id.to_s %> <%= humanize(select) %>
+                      <% end %>
+                      <% select_id += 1 %>
+                    <% end %></p>
+                <% end %>
+              <% end %>
+            <% end %>
+            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true %></p>
+          <% end %>
+          <p><button class='btn btn-warning' onclick="save('<%= team.number %>');">Save Data Locally</button> <span id="saved_<%= team.number %>" class='label label-success' style='display: none;'>Saved!</span></p>
+        </div>
+      <% end %>
+      <center>
+        <p><strong>Team <span class="id-pos">1</span> / <span class="id-total"><%= @pit_queue.size %></span></strong></p>
+      </center>
+
+      <hr>
+      <button id='prev_btn' class='btn btn-default pull-left' onclick='prevTeam();' style='display: none;'>&laquo; Previous</button>
+      <button id='next_btn' class='btn btn-default pull-right' onclick='nextTeam();'>Next &raquo;</button>
+    </div>
+  </div>
+  <div class="col-lg-2 col-sm-1"></div>
+</div>

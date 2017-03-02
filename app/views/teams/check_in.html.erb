@@ -8,10 +8,10 @@
     <center>
       <div class="btn-group btn-group-lg">
         <% if current_user.is_checked_in %>
-          <button type="button" class="btn btn-success btn-lg" disabled="disabled"><i class="fa fa-check"></i> Currently Checked In</button>
+          <button type="button" class="btn btn-success btn-lg disabled" disabled='true'><i class="fa fa-check"></i> Checked In</button>
           <%= link_to 'Check Out'.html_safe, check_in_inactive_path, method: :post, class: 'btn btn-lg btn-warning' %>
         <% else %>
-        <button type="button" class="btn btn-danger btn-lg" disabled="disabled"><i class="fa fa-times"></i> Not Currently Checked In</button>
+        <button type="button" class="btn btn-danger btn-lg disabled" disabled='true'><i class="fa fa-times"></i> Not Checked In</button>
           <%= link_to 'Check In'.html_safe, check_in_active_path, method: :post, class: 'btn btn-lg btn-success' %>
         <% end %>
       </div>
@@ -21,7 +21,7 @@
     </center>
 
     <% if current_user.is_checked_in && current_user.event.pit_data.where('event_id=?', current_user.team.event.id).count > 0 %>
-      <h4>Pit Scout Queue</h4>
+      <h4>Pit Scout Queue <%= link_to '&raquo; Pit Scout Now &raquo;'.html_safe, pit_scout_path, class: 'btn btn-xs btn-primary' %></h4>
       <% if current_user.empty_event_pit_data.count > 0 %>
         <table class="table table-responsive table-bordered" style="text-align: center;">
           <tbody>
@@ -37,7 +37,7 @@
         <p><em><strong>Your team's pit scouting is complete!</strong></em></p>
       <% end %>
 
-      <h4>Match Scout Assignments</h4>
+      <h4>Match Scout Assignments <%= link_to '&raquo; Match Scout Now &raquo;'.html_safe, match_scout_path, class: 'btn btn-xs btn-primary' %></h4>
       <p>
         <em><strong>You are scouting teams at the <%= current_user.match_scout_assignment.gsub('_', ' ').capitalize %> driver station.</strong></em>
       </p>

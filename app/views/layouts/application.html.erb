@@ -30,6 +30,21 @@
               <%= link_to "<i class='fa fa-home'></i> Home".html_safe, root_path %>
             </li>
             <% if user_signed_in? && !current_user.team_registration.nil? && current_user.team_registration.current_reg? %>
+              <% if current_user.is_checked_in && !current_user.team.event.nil? %>
+                <li class='dropdown <%= "active" if params[:controller] == "scout" && (params[:action] == "pit_scout" || params[:action] == "match_scout") %>'>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    <i class="fa fa-search"></i> Scouting <span class="caret"></span>
+                  </a>
+                  <ul class='dropdown-menu'>
+                    <li class="<%= 'active' if params[:action] == 'pit_scout' %>">
+                      <%= link_to '<i class="fa fa-archive"></i> Pit Scouting'.html_safe, pit_scout_path %>
+                    </li>
+                    <li class="<%= 'active' if params[:action] == 'match_scout' %>">
+                      <%= link_to '<i class="fa fa-car"></i> Match Scouting'.html_safe, match_scout_path %>
+                    </li>
+                  </ul>
+                </li>
+              <% end %>
               <li class='dropdown <%= "active" if params[:controller] == "teams" %>'>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                   <i class="fa fa-users"></i> My Team <span class="caret"></span>
