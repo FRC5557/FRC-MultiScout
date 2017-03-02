@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get '/pit' => 'scout#pit_scout', as: :pit_scout
     post '/pit/submit' => 'scout#submit_pit_scout'
     get '/match' => 'scout#match_scout', as: :match_scout
+    post '/match/submit' => 'scout#submit_match_scout'
   end
 
   scope :teams do

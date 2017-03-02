@@ -110,7 +110,7 @@ class ScoutController < ApplicationController
               current_user.team.update(scout_assignments: match_scouts.to_s)
             end
 
-            
+            @match_queue = current_user.team.event.empty_match_data.where(station: current_user.match_scout_assignment, team_id: current_user.team.id).select(:competition_stage, :set_number, :match_number, :team_number).order(competition_stage: :asc, set_number: :asc, match_number: :asc)
           else
             redirect_to check_in_path, alert: I18n.t('scout.must_check_in')
           end
@@ -119,5 +119,8 @@ class ScoutController < ApplicationController
     else
       redirect_to new_user_session_path, alert: I18n.t('scout.sign_in')
     end
+  end
+
+  def submit_match_scout
   end
 end

@@ -1,1 +1,82 @@
-<%= javascript_include_tag 'match_scout' %>
+<div class="row">
+  <div class="col-lg-2 col-sm-1"></div>
+  <div class="col-xs-12 col-sm-10 col-lg-8">
+    <div class="page-header">
+      <h2>Match Scouting <span id="conn_status" class="label label-default">Loading...</span></h2>
+    </div>
+
+    <%= javascript_tag do %>
+      match_queue = <%= raw @match_queue.to_json %>;
+    <% end %>
+
+    <div id="container">
+      <center><p>
+        <strong>Match <span class="id-pos">1</span> / <span class="id-total"><%= @match_queue.size %></span></strong>
+      </p></center>
+      <% @match_queue.each do |match| %>
+        <% match_id = match.competition_stage.to_s + '_' + match.set_number.to_s + '_' + match.match_number.to_s %>
+        <div id="match_<%= match_id %>" style="<%= 'display: none;' if match != @match_queue.first %>">
+          <h3><%= stage_name(match.competition_stage) %> <%= match.set_number unless match.competition_stage == 1 %> Match #<%= match.match_number %> - Team <%= match.team_number %></h3>
+          <%= form_tag({controller: :scout, action: :submit_match_scout}, method: :post, id: 'matchform_' + match_id) do %>
+
+            <% eval(current_user.team.scout_schema.match_data).each do |section| %>
+              <% next if section[0] == 'alliances' %>
+              <h4><%= humanize(section[0]) %></h4>
+              <% section[1].each do |field| %>
+                <% case field[1][0] %>
+                  <% when "text" %>
+                    <div class="form-group">
+                      <%= label_tag match_namespace(field[0], match_id).to_param, humanize(field[0]) %>
+                      <%= text_field_tag match_namespace(field[0], match_id).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "text_area" %>
+                    <div class="form-group">
+                      <%= label_tag match_namespace(field[0], match_id).to_param, humanize(field[0]) %>
+                      <%= text_area_tag match_namespace(field[0], match_id).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "number" %>
+                    <div class="form-group">
+                      <%= label_tag match_namespace(field[0], match_id).to_param, humanize(field[0]) %>
+                      <%= number_field_tag match_namespace(field[0], match_id).to_param, '', class: "form-control" %>
+                    </div>
+                  <% when "counter" %>
+                    <p><%= hidden_field_tag match_namespace(field[0], match_id).to_param, 0 %>
+                    <div class='btn-group'>
+                      <button type="button" class='btn btn-success' onclick='increment("match_data_match<%= match_id %>_<%= field[0] %>");'>Increment <%= humanize(field[0]) %></button>
+                      <button id='match_data_match<%= match_id %>_<%= field[0] %>_disp' class='btn btn-success disabled' disabled='disabled'>0</button>
+                      <button type="button" class='btn btn-warning' onclick='decrement("match_data_match<%= match_id %>_<%= field[0] %>");'>-</button>
+                    </div></p>
+                  <% when "checkbox" %>
+                    <div class="checkbox">
+                      <%= label_tag match_checkbox_namespace(field[0], match_id).to_param do %>
+                        <%= check_box_tag match_checkbox_namespace(field[0], match_id).to_param %> <%= humanize(field[0]) %>
+                      <% end %>
+                    </div>
+                  <% when "select" %>
+                    <p><strong><%= humanize(field[0]) %></strong></p>
+                    <% select_id = 0 %>
+                    <p><% field[1][1].each do |select| %>
+                      <%= label_tag match_selectify_string_id_option(field[0], select_id.to_s, match_id).to_param, class: 'radio-inline' do %>
+                        <%= radio_button_tag match_selectify_string_id(field[0], match_id).to_param, select_id.to_s %> <%= humanize(select) %>
+                      <% end %>
+                      <% select_id += 1 %>
+                    <% end %></p>
+                <% end %>
+              <% end %>
+            <% end %>
+            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true, onclick: 'clear(' + match_id + ')' %></p>
+          <% end %>
+          <p><button class='btn btn-warning' onclick="save('<%= match_id %>');">Save Data Locally</button> <span id="saved_<%= match_id %>" class='label label-success' style='display: none;'>Saved!</span></p>
+        </div>
+      <% end %>
+      <center>
+        <p><strong>Match <span class="id-pos">1</span> / <span class="id-total"><%= @match_queue.size %></span></strong></p>
+      </center>
+
+      <hr>
+      <button id='prev_btn' class='btn btn-default pull-left' onclick='prevMatch();' style='display: none;'>&laquo; Previous</button>
+      <button id='next_btn' class='btn btn-default pull-right' onclick='nextMatch();'>Next &raquo;</button>
+    </div>
+  </div>
+  <div class="col-lg-2 col-sm-1"></div>
+</div>

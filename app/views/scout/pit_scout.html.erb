@@ -1,4 +1,3 @@
-<%= javascript_include_tag 'pit_scout' %>
 <div class="row">
   <div class="col-lg-2 col-sm-1"></div>
   <div class="col-xs-12 col-sm-10 col-lg-8">
@@ -8,12 +7,8 @@
 
     <%= javascript_tag do %>
       queue = <%= raw @pit_queue.to_json %>;
-      AUTH_TOKEN = document.getElementsByName('csrf-token')[0].getAttribute('content');
     <% end %>
 
-    <div id="loading" style="display: none;">
-      <center><h3><i class='fa fa-refresh fa-spin'></i> Submitting</h3></center>
-    </div>
     <div id="container">
       <center><p>
         <strong>Team <span class="id-pos">1</span> / <span class="id-total"><%= @pit_queue.size %></span></strong>
@@ -59,9 +54,9 @@
                 <% end %>
               <% end %>
             <% end %>
-            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true %></p>
+            <p><%= submit_tag 'Submit Data Online', class: 'btn btn-info disabled online-submit', disabled: true, onclick: 'clearTeam(' + team.number.to_s + ')' %></p>
           <% end %>
-          <p><button class='btn btn-warning' onclick="save('<%= team.number %>');">Save Data Locally</button> <span id="saved_<%= team.number %>" class='label label-success' style='display: none;'>Saved!</span></p>
+          <p><button class='btn btn-warning' onclick="saveTeam('<%= team.number %>');">Save Data Locally</button> <span id="saved_<%= team.number %>" class='label label-success' style='display: none;'>Saved!</span></p>
         </div>
       <% end %>
       <center>
