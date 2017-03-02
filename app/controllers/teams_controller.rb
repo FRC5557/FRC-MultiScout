@@ -24,7 +24,7 @@ class TeamsController < ApplicationController
         @page_confirmed = @team.confirmed_members.page(params[:pagec].nil?? 1 : params[:pagec]).per(10)
         @page_unconfirmed = @team.unconfirmed_members.page(params[:pageu].nil?? 1 : params[:pageu]).per(10)
 
-        @matches = JSON.parse(tba_request('https://www.thebluealliance.com/api/v2/event/' + @team.event.key + '/matches').body)
+        @matches = @team.event.nil? ? [] : JSON.parse(tba_request('https://www.thebluealliance.com/api/v2/event/' + @team.event.key + '/matches').body)
       else
         redirect_to root_path, flash: {error: I18n.t('teams.permissions')}
       end
