@@ -5,7 +5,7 @@ class PitDatum < ApplicationRecord
   belongs_to :user
 
   def self.to_csv(team, event)
-    data = all.where(team_id: team, event_id: event).order(number: :asc)
+    data = all.where(team_id: team, event_id: event).where('data IS NOT NULL').order(number: :asc)
     columns = ['Team number']
     eval(Team.find(team).scout_schema.pit_data).each do |section|
       section[1].each do |field|
@@ -15,8 +15,7 @@ class PitDatum < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << columns
       data.each do |entry|
-        raw_data = eval(entry.data.to_s)
-        if raw_data.nil? then raw_data = [] end
+        raw_data = eval(entry.data)
         processed = [entry.number.to_s]
         raw_data.each do |rd|
           processed.push(rd[1])
