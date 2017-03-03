@@ -188,7 +188,7 @@ class TeamRegistrationsController < ApplicationController
                   break
                 end
               end
-              current_user.team.update(scout_assignments: match_scouts.to_s)
+              reg.user.team.update(scout_assignments: match_scouts.to_s)
             end
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_in')}
           else
@@ -222,6 +222,7 @@ class TeamRegistrationsController < ApplicationController
                 match_scouts[station[0].to_param] = nil
               end
             end
+            reg.user.team.update(scout_assignments: match_scouts.to_s)
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {success: I18n.t('teams.member_check_out')}
           else
             redirect_to edit_team_path(current_user.team_registration.team.number), flash: {error: I18n.t('teams.not_saved')}
