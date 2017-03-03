@@ -46,6 +46,11 @@
                       <button id='match_data_match<%= match_id %>_<%= field[0] %>_counter_disp' class='btn btn-success disabled' disabled='disabled'>0</button>
                       <button type="button" class='btn btn-warning' onclick='decrement("match_data_match<%= match_id %>_<%= field[0] %>_counter");'>-</button>
                     </div></p>
+                  <% when "location" %>
+                    <p><strong><%= humanize(field[0]) %></strong></p>
+                    <p><%= hidden_field_tag match_location_namespace(field[0], match_id, 'x').to_param %></p>
+                    <p><%= hidden_field_tag match_location_namespace(field[0], match_id, 'y').to_param %></p>
+                    <canvas width="324" height="752" onclick="processDraw(event,'match_data_match<%=match_id%>_<%=field[0]%>_location_pic')" id="match_data_match<%=match_id%>_<%=field[0]%>_location_pic" style="background-image: url(<%= image_path('field.png') %>);"></canvas>
                   <% when "checkbox" %>
                     <div class="checkbox">
                       <%= label_tag match_checkbox_namespace(field[0], match_id).to_param do %>

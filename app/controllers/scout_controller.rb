@@ -168,6 +168,19 @@ class ScoutController < ApplicationController
                   else
                     data[field[0].to_param] = input_data
                   end
+                when "location"
+                  input_data_x = params[:match_data][match_data.to_param][(field[0] + '_location_x').to_param]
+                  input_data_y = params[:match_data][match_data.to_param][(field[0] + '_location_y').to_param]
+                  if input_data_x.nil?
+                    data[(field[0] + '_x').to_param] = nil
+                  else
+                    data[(field[0] + '_x').to_param] = input_data_x
+                  end
+                  if input_data_y.nil?
+                    data[(field[0] + '_y').to_param] = nil
+                  else
+                    data[(field[0] + '_y').to_param] = input_data_y
+                  end
                 else
                   input_data = params[:match_data][match_data.to_param][field[0].to_param]
                   data[field[0].to_param] = input_data

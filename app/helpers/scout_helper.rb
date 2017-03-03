@@ -26,6 +26,10 @@ module ScoutHelper
     'match_data[match' + mid + '[' + str + '_counter]]'
   end
 
+  def match_location_namespace(str, mid, coord)
+    'match_data[match' + mid + '[' + str + '_location_' + coord + ']]'
+  end
+
   def match_selectify_string_id(sid, mid)
     match_namespace(sid + '_select', mid)
   end

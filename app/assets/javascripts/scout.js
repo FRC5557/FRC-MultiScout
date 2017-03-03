@@ -193,3 +193,27 @@ function restoreAll() {
     restoreTeam(queue[index].number);
   }
 }
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+}
+
+function processDraw(e, id) {
+  var canvas = document.getElementById(id);
+  var context = canvas.getContext("2d");
+  var pos = getMousePos(canvas, e);
+  var posx = pos.x;
+  var posy = pos.y;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "red";
+  context.beginPath();
+  context.arc(posx, posy, 5, 0, 2*Math.PI);
+  context.fill();
+
+  $("#" + id.replace('_pic','_y')).val(posy);
+  $("#" + id.replace('_pic','_x')).val(posx);
+}
