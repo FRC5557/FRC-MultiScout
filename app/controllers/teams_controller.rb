@@ -2,6 +2,8 @@ class TeamsController < ApplicationController
   include ErrorUtil
   include HTTPUtil
 
+  require 'csv'
+
   def new
     if user_signed_in?
       @team = Team.new
@@ -21,8 +23,8 @@ class TeamsController < ApplicationController
     if user_signed_in?
       @team = Team.where(number: params[:id]).first
       if !@team.nil? && ((params[:id].to_i == current_user.team_registration.team.number && current_user.is_team_manager && current_user.team_registration.current_reg?) || current_user.is_administrator)
-        @page_confirmed = @team.confirmed_members.page(params[:pagec].nil?? 1 : params[:pagec]).per(10)
-        @page_unconfirmed = @team.unconfirmed_members.page(params[:pageu].nil?? 1 : params[:pageu]).per(10)
+        @page_confirmed = @team.confirmed_members.page(params[:pagec].nil?? 1 : params[:pagec]).per(15)
+        @page_unconfirmed = @team.unconfirmed_members.page(params[:pageu].nil?? 1 : params[:pageu]).per(15)
 
         @matches = @team.event.nil? ? [] : JSON.parse(tba_request('https://www.thebluealliance.com/api/v2/event/' + @team.event.key + '/matches').body)
       else
@@ -197,5 +199,28 @@ class TeamsController < ApplicationController
     else
       redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
     end
+  end
+
+  def export_pit_data
+    if user_signed_in?
+      if current_user.is_team_manager && !current_user.team_registration.nil? && current_user.team_registration.current_reg?
+        team = current_user.team_registration.team
+        if team.event.nil?
+          redirect_to edit_team_path(team.number), alert: I18n.t('teams.no_event')
+        else
+          respond_to do |format|
+            format.csv { send_data PitDatum.to_csv(current_user.team.id, current_user.team.event.id)}
+          end
+        end
+      else
+        redirect_to root_path, flash: {error: I18n.t('teams.permissions')}
+      end
+    else
+      redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
+    end
+  end
+
+  def export_match_data
+
   end
 end

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     post '/check_in/inactive' => 'teams#check_in_inactive', as: :check_in_inactive
     post '/import_pit_data' => 'teams#import_pit_data', as: :team_import_pits
     post '/import_match_data' => 'teams#import_match_data', as: :team_import_matches
+    get '/export_pit_data' => 'teams#export_pit_data', as: :pit_data_download
   end
 
   namespace :admin do
