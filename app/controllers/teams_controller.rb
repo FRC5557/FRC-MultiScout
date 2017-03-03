@@ -2,8 +2,6 @@ class TeamsController < ApplicationController
   include ErrorUtil
   include HTTPUtil
 
-  require 'csv'
-
   def new
     if user_signed_in?
       @team = Team.new
@@ -221,6 +219,21 @@ class TeamsController < ApplicationController
   end
 
   def export_match_data
-
+    if user_signed_in?
+      if current_user.is_team_manager && !current_user.team_registration.nil? && current_user.team_registration.current_reg?
+        team = current_user.team_registration.team
+        if team.event.nil?
+          redirect_to edit_team_path(team.number), alert: I18n.t('teams.no_event')
+        else
+          respond_to do |format|
+            format.csv { send_data MatchDatum.to_csv(current_user.team.id, current_user.team.event.id)}
+          end
+        end
+      else
+        redirect_to root_path, flash: {error: I18n.t('teams.permissions')}
+      end
+    else
+      redirect_to new_user_session_path, alert: I18n.t('teams.sign_in')
+    end
   end
 end

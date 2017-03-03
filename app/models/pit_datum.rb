@@ -15,7 +15,8 @@ class PitDatum < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << columns
       data.each do |entry|
-        raw_data = eval(entry.data)
+        raw_data = eval(entry.data.to_s)
+        if raw_data.nil? then raw_data = [] end
         processed = [entry.number.to_s]
         raw_data.each do |rd|
           processed.push(rd[1])
