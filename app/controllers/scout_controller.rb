@@ -188,7 +188,7 @@ class ScoutController < ApplicationController
               end
             end
 
-            unless MatchDatum.where(competition_stage: stage, set_number: set, match_number: number, event_id: current_user.team.event.id, team_id: current_user.team.id).first.update(data: data.to_s, user_id: current_user.id)
+            unless MatchDatum.where(station: current_user.match_scout_assignment, competition_stage: stage, set_number: set, match_number: number, event_id: current_user.team.event.id, team_id: current_user.team.id).first.update(data: data.to_s, user_id: current_user.id)
               error = true
             end
           end
