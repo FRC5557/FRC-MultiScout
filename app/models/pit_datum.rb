@@ -9,7 +9,7 @@ class PitDatum < ApplicationRecord
     columns = []
     eval(Team.find(team).scout_schema.pit_data).each do |section|
       section[1].each do |field|
-        columns.push(field[0])
+        columns.push(field[0].gsub('_', '').capitalize)
       end
     end
     CSV.generate(headers: true) do |csv|
