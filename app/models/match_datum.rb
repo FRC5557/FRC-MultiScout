@@ -24,7 +24,11 @@ class MatchDatum < ApplicationRecord
         raw_data = eval(entry.data)
         processed = [entry.team_number.to_s, stage_number_to_name(entry.competition_stage), entry.set_number.to_s, entry.match_number.to_s]
         raw_data.each do |rd|
-          processed.push(rd[1])
+          output = rd[1]
+          if rd[1] == true || rd[1] == false
+            output = output ? 1 : 0
+          end
+          processed.push(output)
         end
 
         csv << processed
